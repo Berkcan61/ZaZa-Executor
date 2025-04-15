@@ -10,12 +10,7 @@ It already supports **96% UNC** and **55% sUNC**, and aims to become the **best 
 - ✅ Keyless and 100% free forever
 - ⚡ 96% UNC support – high compatibility
 - 🔧 55% sUNC support (and improving)
-- 🌀 Clean, semi-transparent GUI with Blur background
-- 🖱️ Scroll area, smooth close-button hover effect
-- 🧠 Advanced LuaJIT base for performance
-- 🛡️ Anti-logging & Anti-crash mechanisms
-- 🔒 Protection against Adonis and other admin systems
-- 🧪 Built-in debugging, hook bypass & fake admin injection
+- 🖱️ Scroll area, smooth close-button, clear-button and inject-button
 
 ---
 
