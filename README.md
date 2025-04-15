@@ -1,2 +1,53 @@
-# ZaZa-Executor
-# ZaZa Executor  Free • Keyless • In Development   96% UNC · 55% sUNC  Fast, modern Roblox Executor with blur GUI, anti-crash &amp; Adonis bypass.  📩 Suggestions? DM **Brxyk_ / berkcan61** on Discord.   ⚠️ For educational use only.
+# ZaZa Executor
+
+ZaZa Executor is a powerful and free Roblox Executor currently in development.  
+It already supports **96% UNC** and **55% sUNC**, and aims to become the **best keyless, 100% free executor** in the near future.
+
+---
+
+## 🚀 Features
+
+- ✅ Keyless and 100% free forever
+- ⚡ 96% UNC support – high compatibility
+- 🔧 55% sUNC support (and improving)
+- 🌀 Clean, semi-transparent GUI with Blur background
+- 🖱️ Scroll area, smooth close-button hover effect
+- 🧠 Advanced LuaJIT base for performance
+- 🛡️ Anti-logging & Anti-crash mechanisms
+- 🔒 Protection against Adonis and other admin systems
+- 🧪 Built-in debugging, hook bypass & fake admin injection
+
+---
+
+## 📜 Changelog
+
+### v0.1 – April 15, 2025
+- Initial release of ZaZa Executor
+- 96% UNC compatibility
+- 55% sUNC compatibility
+- Keyless system fully implemented
+
+---
+
+## 🛠️ Development Status
+
+ZaZa Executor is **currently under active development**.  
+Suggestions or feature requests are welcome!
+
+💬 Contact on Discord: **Brxyk_ / berkcan61**
+
+---
+
+## 📌 Future Goals
+
+- 💯 Reach full 100% UNC and sUNC support
+- 🔓 Remain the most stable and free keyless executor
+- 🧬 Add dynamic protection against admin scripts and detections
+
+---
+
+## ⚠️ Disclaimer
+
+This project is for **educational purposes only**.  
+We do **not encourage** the misuse of this tool in violation of Roblox’s Terms of Service.  
+Use at your own risk.
