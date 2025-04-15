@@ -16,7 +16,7 @@ It already supports **96% UNC** and **55% sUNC**, and aims to become the **best 
 
 ## 📜 Changelog
 
-### v0.1 – April 15, 2025
+### Pre-Release v0.1 – April 15, 2025
 - Initial release of ZaZa Executor
 - 96% UNC compatibility
 - 55% sUNC compatibility
