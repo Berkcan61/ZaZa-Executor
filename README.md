@@ -10,7 +10,6 @@ It already supports **96% UNC** and **55% sUNC**, and aims to become the **best 
 - ✅ Keyless and 100% free forever
 - ⚡ 96% UNC support – high compatibility
 - 🔧 55% sUNC support (and improving)
-- 🖱️ Scroll area, smooth close-button, clear-button and inject-button
 
 ---
 
