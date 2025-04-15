@@ -41,6 +41,12 @@ Suggestions or feature requests are welcome!
 
 ---
 
+## License
+
+By downloading and using the ZaZa Executor, you automatically agree to the terms outlined in the [LICENSE](LICENSE.txt).
+
+Please review the license carefully before using the software. If you do not agree with the terms, you may not download or use the ZaZa Executor.
+
 ## ⚠️ Disclaimer
 
 This project is for **educational purposes only**.  
