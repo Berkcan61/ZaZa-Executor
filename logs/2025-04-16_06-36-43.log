@@ -1,0 +1,27 @@
+[2025-04-16 06:36:43.862] [Xeno] [info] Version: Xeno - v1.1.75
+[2025-04-16 06:36:43.862] [Xeno] [info] Logs stored in logs/2025-04-16_06-36-43.log
+[2025-04-16 06:36:43.864] [Xeno] [debug] Client Checker thread: 0xe6f4dfded0
+[2025-04-16 06:36:43.864] [Xeno] [debug] Xeno Caching thread: 0xe6f4dfdec0
+[2025-04-16 06:36:43.865] [Cache] [info] File: C:\Users\bozku\AppData\Local\Temp\XENO_CACHE.bin
+[2025-04-16 06:36:43.865] [Xeno] [debug] WebSockets Cleaner thread: 0xe6f4dfdeb0
+[2025-04-16 06:36:43.865] [Xeno] [debug] Xeno Server thread: 0xe6f4dfdea0
+[2025-04-16 06:36:43.866] [Cache] [warning] Invalid or corrupted cache header
+[2025-04-16 06:36:43.866] [Server] [info] Listening on http://localhost:3110
+[2025-04-16 06:36:43.866] [Cache] [warning] No valid cache found - starting fresh
+[2025-04-16 06:36:43.880] [Xeno] [info] Creating new RBXClient: 16644
+[2025-04-16 06:36:43.880] [RBXClient] [info] [16644]: Initializing...
+[2025-04-16 06:36:43.880] [RBXClient] [info] [16644]: Version: version-c2c9efad42eb44e5
+[2025-04-16 06:36:43.880] [Xeno] [debug] Created RBXClient instance @0x298fecb6cd0
+[2025-04-16 06:36:43.880] [Xeno] [info] Successfully created RBXClient: 16644
+[2025-04-16 06:36:43.880] [RBXClient] [debug] [16644]: Getting RenderView...
+[2025-04-16 06:36:43.988] [RBXClient] [debug] [16644]: String: 0x145a41e46d0
+[2025-04-16 06:36:43.988] [RBXClient] [debug] [16644]: Renderview: 0x145ee0a16b0
+[2025-04-16 06:36:43.989] [RBXClient] [debug] [16644]: DataModel: 0x145a4323860
+[2025-04-16 06:36:43.995] [RBXClient] [debug] [16644]: DataModel Name: Ugc
+[2025-04-16 06:36:43.996] [RBXClient] [debug] [16644]: LocalPlayer: 0x145a4e91d30
+[2025-04-16 06:36:43.996] [RBXClient] [debug] [16644]: LocalPlayer Name: 'Boz_61'
+[2025-04-16 06:36:44.023] [RBXClient] [debug] [16644]: EventConnection: 0x14593ad7170
+[2025-04-16 06:36:44.140] [RBXClient] [debug] [16644]: StyledTextLabel: 0x1459c8fb760
+[2025-04-16 06:36:44.207] [RBXClient] [info] [16644]: StyledTextLabel PerVMState was set to NotRunYet
+[2025-04-16 06:36:45.676] [RBXClient] [trace] [16644]: Attach ping recieved, restored bytecode.
+[2025-04-16 06:37:40.318] [WebSocket] [debug] Connection established for 'ws://echo.websocket.events'

@@ -1,0 +1,22 @@
+[2025-04-16 06:40:29.143] [Xeno] [info] Version: Xeno - v1.1.75
+[2025-04-16 06:40:29.143] [Xeno] [info] Logs stored in logs/2025-04-16_06-40-29.log
+[2025-04-16 06:40:29.144] [Xeno] [debug] Client Checker thread: 0x918f5fe0a0
+[2025-04-16 06:40:29.145] [Xeno] [debug] Xeno Caching thread: 0x918f5fe090
+[2025-04-16 06:40:29.145] [Xeno] [debug] WebSockets Cleaner thread: 0x918f5fe080
+[2025-04-16 06:40:29.145] [Cache] [info] File: C:\Users\bozku\AppData\Local\Temp\XENO_CACHE.bin
+[2025-04-16 06:40:29.145] [Xeno] [debug] Xeno Server thread: 0x918f5fe070
+[2025-04-16 06:40:29.145] [Cache] [info] Reattaching to cached client PID: 16644
+[2025-04-16 06:40:29.146] [Server] [info] Listening on http://localhost:3110
+[2025-04-16 06:40:29.146] [Cache] [info] Loaded cache: 1 RBXClients, 0 RBXBytecode, 0 RBXMFlags, 1 RBXRenderViews
+[2025-04-16 06:40:29.146] [Xeno] [info] Creating new RBXClient: 16644
+[2025-04-16 06:40:29.146] [RBXClient] [info] [16644]: Initializing...
+[2025-04-16 06:40:29.146] [RBXClient] [info] [16644]: Version: version-c2c9efad42eb44e5
+[2025-04-16 06:40:29.146] [Xeno] [debug] Created RBXClient instance @0x248a9e45dc0
+[2025-04-16 06:40:29.146] [Xeno] [info] Successfully created RBXClient: 16644
+[2025-04-16 06:40:29.147] [RBXClient] [debug] [16644]: Getting RenderView...
+[2025-04-16 06:40:29.147] [RBXClient] [info] [16644]: RenderView retrieved from Cache: 0x145ee0a16b0
+[2025-04-16 06:40:29.147] [RBXClient] [debug] [16644]: DataModel: 0x145a4323860
+[2025-04-16 06:40:29.152] [RBXClient] [debug] [16644]: DataModel Name: Ugc
+[2025-04-16 06:40:29.152] [RBXClient] [debug] [16644]: LocalPlayer: 0x145a4e96100
+[2025-04-16 06:40:29.152] [RBXClient] [debug] [16644]: LocalPlayer Name: 'Boz_61'
+[2025-04-16 06:40:29.160] [RBXClient] [info] [16644]: Client was already attached; handling functions...
