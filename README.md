@@ -15,11 +15,13 @@ It already supports **96% UNC** and **55% sUNC**, and aims to become the **best 
 
 ## 📜 Changelog
 
-### Pre-Release v0.1 – April 15, 2025
-- Initial release of ZaZa Executor
+### Beta v0.2 – April 17, 2025
+- Updated to the newest Roblox version: version-b83d92f2144a48e2
 - 96% UNC compatibility
 - 55% sUNC compatibility
-- Keyless system fully implemented
+- Added a new script editor styled like Visual Studio Code
+- Added a new button to kill Roblox if it crashes
+- Added a tab system for managing multiple scripts
 
 ---
 
