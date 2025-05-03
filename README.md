@@ -15,15 +15,20 @@ It already supports **96% UNC** and **55% sUNC**, and aims to become the **best 
 
 ## 📜 Changelog
 
-### Beta v0.3 – April 20, 2025
-- Updated to the newest Roblox version: version-1e91b4133e334c9c
-- 94% UNC compatibility
-- 55% sUNC compatibility
+### Beta v0.4 – Mai 03, 2025
+- Works with version-a9a5d0b275a34ffb
+- Changed the API to Velocity
+- 99% UNC compatibility
+- 80% sUNC compatibility
 - Bug fixes
 - Code optimized
 - GUI improvements
-- Optimized the script editor
-- Added Discord RPC
+- Optimized the script editor – new functions added, like `printidentity()`
+- Added a console
+- Console now shows logs
+- Added new buttons
+- Added settings – you can now activate "Always on Top" for the executor
+- Added injection status indicator (shows if injected or not)
 
 view the full list: [Changelog](CHANGELOG.md)
 
