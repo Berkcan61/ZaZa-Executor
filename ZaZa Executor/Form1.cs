@@ -5,178 +5,207 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using CefSharp;
+using CefSharp.WinForms;
 using CloudyApi;
+using Guna.UI2.WinForms;
+using Microsoft.Web.WebView2.WinForms;
+using VelocityApiMadeBy_bubzie;
 
 namespace ZaZa_Executor
 {
     public partial class Form1 : Form
     {
+        private readonly VelAPI BubzVelAPi = new VelAPI();
+        private string currentFilePath = string.Empty;
+
         public Form1()
         {
             InitializeComponent();
-            AutoLoadEditor();
+            BubzVelAPi.StartCommunication();
+            statusTimer.Tick += statusTimer_Tick;
+            statusTimer.Start();
+
+            cbTopMost.Checked = this.TopMost = Properties.Settings.Default.TopMost;
+        }
+        private async Task<string> GetEditorContent()
+        {
+            await chromiumWebBrowser1.WaitForInitialLoadAsync();
+
+            string script = "editor.getValue()";
+            var result = await chromiumWebBrowser1.EvaluateScriptAsync(script);
+            return result?.Result?.ToString() ?? string.Empty;
+        }
+
+        private async Task ExecuteScriptAsync()
+        {
+            string scriptContent = await GetEditorContent();
+
+            if (string.IsNullOrWhiteSpace(scriptContent) || IsScriptEffectivelyEmpty(scriptContent))
+            {
+                LogToConsole("Script is empty or has no executable content.", LogType.Warning);
+                return;
+            }
+
+            if (!IsRobloxRunning())
+            {
+                LogToConsole("Roblox is not running. Please start Roblox before executing the script.", LogType.ERROR);
+                return;
+            }
+
+            LogToConsole("Executing script...", LogType.INFO);
+
+            try
+            {
+                BubzVelAPi.Execute(scriptContent);
+                LogToConsole("Script executed successfully.", LogType.Success);
+            }
+            catch (Exception ex)
+            {
+                LogToConsole($"Error during script execution: {ex.Message}", LogType.ERROR);
+            }
+
+            LogToConsole("Script execution finished.", LogType.INFO);
+        }
+
+        private async Task Attachwithapi()
+        {
+            try
+            {
+                var proc = Process.GetProcessesByName("RobloxPlayerBeta").FirstOrDefault();
+                if (proc == null)
+                {
+                    LogToConsole("Roblox isnt Running!", LogType.ERROR);
+                    return;
+                }
+                if (BubzVelAPi.IsAttached(proc.Id))
+                {
+                    LogToConsole($"Already Injected into Roblox (PID: {proc.Id})", LogType.INFO);
+                    return;
+                }
+                await BubzVelAPi.Attach(proc.Id);
+                LogToConsole($"Injected into Roblox (PID: {proc.Id})", LogType.Success);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Injection failed: {ex.Message}", "Error");
+            }
+        }
+
+        private async Task CleaWhiteitor()
+        {
+            string script = "editor.setValue('')";
+            await chromiumWebBrowser1.EvaluateScriptAsync(script);
+        }
+
+        private async Task SaveTextAsLua()
+        {
+            string scriptsPath = Path.Combine(System.Windows.Forms.Application.StartupPath, "Scripts");
+
+
+            Directory.CreateDirectory(scriptsPath);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                InitialDirectory = scriptsPath,
+                Filter = "Lua files (*.lua)|*.lua",
+                DefaultExt = "lua",
+                Title = "Save Lua File"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string content = await GetEditorContent();
+                File.WriteAllText(saveFileDialog.FileName, content);
+            }
+        }
+
+        private async Task LoadTextFromFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Lua files (*.lua)|*.lua",
+                Title = "Open Lua File"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string content = File.ReadAllText(openFileDialog.FileName);
+                await chromiumWebBrowser1.EvaluateScriptAsync($"editor.setValue(`{content}`);");
+            }
+        }
+
+        private void Startup()
+        {
+            chromiumWebBrowser1.Load(System.Windows.Forms.Application.StartupPath + "\\bin\\monaco-editor\\monaco.html");
+            chromiumWebBrowser2.Load(System.Windows.Forms.Application.StartupPath + "\\bin\\console.html");
+        }
+
+        public enum LogType
+        {
+            INFO,
+            ERROR,
+            Warning,
+            Success
+        }
+
+        public static class ConsoleLogger
+        {
+            public static Color GetLogColor(LogType type)
+            {
+                if (type == LogType.INFO)
+                    return Color.White;
+                if (type == LogType.ERROR)
+                    return Color.Red;
+                if (type == LogType.Warning)
+                    return Color.Yellow;
+                if (type == LogType.Success)
+                    return Color.Green;
+
+                return Color.White;
+            }
+        }
+
+        private void LogToConsole(string message, LogType type)
+        {
+            string timestamp = DateTime.Now.ToString("HH:mm:ss");
+            string logMessage = $"[{timestamp}] [{type}] {message}";
+
+            string typeString = type.ToString().ToLower();
+
+            string script = $"logMessage('{logMessage}', '{typeString}');";
+            chromiumWebBrowser2.ExecuteScriptAsync(script);
+        }
+
+        private void SetRoundedRegion()
+        {
+            int radius = 10;
+            GraphicsPath path = new GraphicsPath();
+            path.StartFigure();
+            path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
+            path.AddArc(new Rectangle(this.Width - radius, 0, radius, radius), 270, 90);
+            path.AddArc(new Rectangle(this.Width - radius, this.Height - radius, radius, radius), 0, 90);
+            path.AddArc(new Rectangle(0, this.Height - radius, radius, radius), 90, 90);
+            path.CloseFigure();
+
+            this.Region = new Region(path);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            CloudyApi.Api.External.RegisterExecutor("ZaZa");
+            Startup();
+            SetRoundedRegion();
 
             Api.misc.SetDiscordRpc("ZaZa Executor", "1363485258271686807", "https://github.com/Berkcan61/Logo/blob/main/ZaZa%20(1).png?raw=true", "Idling...");
-
-            this.Icon = new Icon("C:\\Users\\bozku\\source\\repos\\ZaZa Executor\\ZaZa Executor\\bin\\ico\\64px.ico");
-        }
-
-        private async void AutoLoadEditor()
-        {
-            await Editor.EnsureCoreWebView2Async(null);
-
-            string htmlPath = Path.Combine(Application.StartupPath, "C:\\Users\\bozku\\source\\repos\\ZaZa Executor\\ZaZa Executor\\bin\\monaco-editor\\monaco.html");
-
-            Editor.CoreWebView2.Navigate("file:///" + htmlPath.Replace("\\", "/"));
-        }
-
-        private async void guna2Button1_Click(object sender, EventArgs e)
-        {
-            if (!CloudyApi.Api.External.IsInjected())
-            {
-                AppendTextToConsole("Execution failed: ZaZa is not injected.", "error");
-                return;
-            }
-
-            string raw = await Editor.ExecuteScriptAsync("getCode()");
-            string script = Regex.Unescape(raw.Trim('"'));
-
-            if (string.IsNullOrWhiteSpace(script))
-            {
-                AppendTextToConsole("Execution failed: Editor is empty.", "warning");
-                return;
-            }
-
-            try
-            {
-                CloudyApi.Api.External.execute(script);
-                AppendTextToConsole("Execute button pressed. Script sent to Roblox.", "info");
-            }
-            catch (Exception ex)
-            {
-                AppendTextToConsole("Execution error: " + ex.Message, "error");
-            }
-        }
-
-        private void ExecuteCommand(string command)
-        {
-            try
-            {
-                AppendTextToConsole("> " + command);
-
-                if (command == "clear")
-                {
-                    console.Clear();
-                }
-                else if (command == "inject")
-                {
-                    AppendTextToConsole("Injection wird durchgeführt...");
-                }
-                else if (command == "execute")
-                {
-                    AppendTextToConsole("Befehl wird ausgeführt...");
-                }
-                else
-                {
-                    AppendTextToConsole("Unbekannter Befehl.");
-                }
-
-                console.Clear();
-            }
-            catch (Exception ex)
-            {
-                AppendTextToConsole("Fehler: " + ex.Message);
-            }
-        }
-
-        private void AppendTextToConsole(string message, string type = "info")
-        {
-            if (console.InvokeRequired)
-            {
-                console.Invoke(new Action<string, string>(AppendTextToConsole), message, type);
-                return;
-            }
-
-            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-            string prefix = $"[{timestamp}] ";
-
-            Color color;
-
-            switch (type.ToLower())
-            {
-                case "error":
-                    color = Color.Red;
-                    prefix += "[ERROR] ";
-                    break;
-                case "success":
-                    color = Color.Green;
-                    prefix += "[SUCCESS] ";
-                    break;
-                case "warning":
-                    color = Color.Orange;
-                    prefix += "[WARNING] ";
-                    break;
-                case "info":
-                default:
-                    color = Color.White;
-                    prefix += "[INFO] ";
-                    break;
-            }
-
-            int start = console.TextLength;
-            console.AppendText(prefix + message + Environment.NewLine);
-            int end = console.TextLength;
-
-            console.Select(start, end - start);
-            console.SelectionColor = color;
-            console.SelectionLength = 0;
-            console.SelectionStart = console.TextLength;
-            console.ScrollToCaret();
-        }
-
-        private string CleanCode(string code)
-        {
-            return code.Replace("\r\n", "\n").Replace("\n", "\n");
-        }
-
-        private async void guna2Button2_Click(object sender, EventArgs e)
-        {
-            if (Editor.CoreWebView2 != null)
-            {
-                await Editor.ExecuteScriptAsync("editor.setValue('');");
-
-                console.Clear();
-                AppendTextToConsole("Console log cleared.", "info");
-            }
-        }
-
-        private void guna2Button3_Click(object sender, EventArgs e)
-        {
-            if (CloudyApi.Api.External.IsInjected())
-            {
-                AppendTextToConsole("Injection: ZaZa is already injected.");
-            }
-            else if (IsRobloxRunning())
-            {
-                AppendTextToConsole("Injection started...");
-                CloudyApi.Api.External.inject();
-            }
-            else
-            {
-                AppendTextToConsole("Roblox is not running.", "warning");
-            }
         }
 
         private bool IsRobloxRunning()
@@ -184,63 +213,128 @@ namespace ZaZa_Executor
             return Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("roblox"));
         }
 
-        private void guna2Button4_Click(object sender, EventArgs e)
+        private bool IsScriptEffectivelyEmpty(string script)
         {
-            Application.Exit();
+            var lines = script.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                string trimmed = line.Trim();
+                if (!trimmed.StartsWith("--") && trimmed.Length > 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private async void Execute_Click(object sender, EventArgs e)
+        {
+            var task = await chromiumWebBrowser1.EvaluateScriptAsync("editor.getValue()");
+
+            if (!task.Success || task.Result == null)
+            {
+                LogToConsole("Failed to retrieve script from editor.", LogType.ERROR);
+                return;
+            }
+
+            string script = task.Result.ToString();
+
+            if (string.IsNullOrWhiteSpace(script) || IsScriptEffectivelyEmpty(script))
+            {
+                LogToConsole("Script is empty or has no executable content.", LogType.Warning);
+                return;
+            }
+
+            LogToConsole("Executing script...", LogType.INFO);
+
+            try
+            {
+                await ExecuteScriptAsync();
+                LogToConsole("Script execution finished. No errors reported.", LogType.INFO);
+            }
+            catch (Exception ex)
+            {
+                LogToConsole($"Error while executing script: {ex.Message}", LogType.ERROR);
+            }
         }
 
-        private void guna2Button5_Click(object sender, EventArgs e)
+
+        private async void Clear_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            await CleaWhiteitor();
         }
 
-        private async void Editor_Click(object sender, EventArgs e)
+        private async void Inject_Click(object sender, EventArgs e)
         {
-            await Editor.EnsureCoreWebView2Async(null);
+            await Attachwithapi();
 
-            string htmlPath = Path.Combine(Application.StartupPath, "C:\\Users\\bozku\\source\\repos\\ZaZa Executor\\ZaZa Executor\\bin\\monaco-editor\\monaco.html");
-
-            Editor.CoreWebView2.Navigate("file:///" + htmlPath.Replace("\\", "/"));
+            UpdateStatus();
         }
 
-        private void guna2Button6_Click(object sender, EventArgs e)
+        private void statusTimer_Tick(object sender, EventArgs e)
+        {
+            UpdateStatus();
+        }
+
+        private void UpdateStatus()
+        {
+            var robloxProcess = Process.GetProcessesByName("RobloxPlayerBeta").FirstOrDefault();
+
+            if (robloxProcess != null && BubzVelAPi.IsAttached(robloxProcess.Id))
+            {
+                Status.FillColor = Color.FromArgb(50, 200, 100);
+                label3.Text = "Injected";
+            }
+            else
+            {
+                Status.FillColor = Color.FromArgb(200, 50, 50);
+                label3.Text = "Not Injected";
+            }
+        }
+
+        private void Kill_Click(object sender, EventArgs e)
         {
             if (IsRobloxRunning())
             {
                 Api.misc.killRoblox();
-                AppendTextToConsole("Roblox successfully killed.", "success");
+                LogToConsole("Roblox successfully killed", LogType.Success);
             }
             else
             {
-                AppendTextToConsole("Roblox is not running, nothing to kill.", "warning");
+                LogToConsole("Roblox is not running, nothing to kill", LogType.Warning);
             }
         }
 
-        private void guna2Button7_Click(object sender, EventArgs e)
+        private async void Log_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "Text Files (*.txt)|*.txt";
-                sfd.Title = "Save Log";
-                sfd.FileName = "ZaZaConsoleLog.txt";
+            await SaveTextAsLua();
+        }
 
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        File.WriteAllText(sfd.FileName, console.Text);
-                        AppendTextToConsole("Log file saved to: " + sfd.FileName, "success");
-                    }
-                    catch (Exception ex)
-                    {
-                        AppendTextToConsole("Failed to save log: " + ex.Message, "error");
-                    }
-                }
-                else
-                {
-                    AppendTextToConsole("Log file save operation was cancelled.", "info");
-                }
-            }
+        private void Exit2_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
+        }
+
+        private void Minimize2_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+
+        private void Load_Click(object sender, EventArgs e)
+        {
+            LoadTextFromFile();
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            SettingsPanel.Visible = !SettingsPanel.Visible;
+        }
+
+        private void cbTopMost_CheckedChanged_1(object sender, EventArgs e)
+        {
+            this.TopMost = cbTopMost.Checked;
+            Properties.Settings.Default.TopMost = cbTopMost.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }
