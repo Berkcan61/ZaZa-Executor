@@ -39,7 +39,7 @@ view the full list: [Changelog](CHANGELOG.md)
 ZaZa Executor is **currently under active development**.  
 Suggestions or feature requests are welcome!
 
-💬 Contact on Discord: **Brxyk_ / berkcan61**
+💬 Contact on Discord: **Brxyk_ #berkcan61**
 
 ---
 
