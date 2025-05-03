@@ -320,9 +320,9 @@ namespace ZaZa_Executor
         }
 
 
-        private void Load_Click(object sender, EventArgs e)
+        private async void Load_Click(object sender, EventArgs e)
         {
-            LoadTextFromFile();
+            await LoadTextFromFile();
         }
 
         private void Settings_Click(object sender, EventArgs e)
